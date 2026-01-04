@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 100% 98%;
+    --foreground: 30 10% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 30 10% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 10% 15%;
+
+    --primary: 43 96% 56%;
+    --primary-foreground: 30 10% 10%;
+
+    --secondary: 45 100% 94%;
+    --secondary-foreground: 30 10% 20%;
+
+    --muted: 45 30% 90%;
+    --muted-foreground: 30 10% 45%;
+
+    --accent: 351 83% 61%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 45 30% 85%;
+    --input: 45 30% 85%;
+    --ring: 43 96% 56%;
+
+    --radius: 1rem;
+
+    /* Lotto ball colors */
+    --ball-yellow: 48 100% 50%;
+    --ball-blue: 210 100% 50%;
+    --ball-red: 0 85% 55%;
+    --ball-gray: 220 10% 50%;
+    --ball-green: 145 70% 40%;
+
+    /* Custom gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(43 96% 56%), hsl(38 100% 50%));
+    --gradient-lucky: linear-gradient(180deg, hsl(45 100% 98%) 0%, hsl(45 80% 92%) 100%);
+    --gradient-ball: linear-gradient(145deg, rgba(255,255,255,0.5) 0%, rgba(0,0,0,0.1) 100%);
+
+    /* Shadows */
+    --shadow-ball: 0 4px 15px rgba(0,0,0,0.2), inset 0 -2px 5px rgba(0,0,0,0.1), inset 0 2px 5px rgba(255,255,255,0.5);
+    --shadow-card: 0 10px 40px -10px rgba(0,0,0,0.1);
+    --shadow-glow: 0 0 30px hsl(43 96% 56% / 0.4);
+  }
+
+  .dark {
+    --background: 30 10% 10%;
+    --foreground: 45 100% 98%;
+    --card: 30 10% 15%;
+    --card-foreground: 45 100% 98%;
+    --popover: 30 10% 15%;
+    --popover-foreground: 45 100% 98%;
+    --primary: 43 96% 56%;
+    --primary-foreground: 30 10% 10%;
+    --secondary: 30 10% 20%;
+    --secondary-foreground: 45 100% 94%;
+    --muted: 30 10% 25%;
+    --muted-foreground: 45 30% 70%;
+    --accent: 351 83% 61%;
+    --accent-foreground: 0 0% 100%;
+    --border: 30 10% 25%;
+    --input: 30 10% 25%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+}
+
+@layer utilities {
+  .ball-shadow {
+    box-shadow: var(--shadow-ball);
+  }
+  
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .glow-shadow {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+@layer components {
+  .gradient-gold {
+    background: var(--gradient-gold);
+  }
+  
+  .gradient-lucky {
+    background: var(--gradient-lucky);
+  }
+
+  .ball-gradient {
+    background: var(--gradient-ball);
+  }
+}
+
+/* Animation keyframes */
+@keyframes ball-drop {
+  0% {
+    transform: translateY(-100px) scale(0.5);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(20px) scale(1.1);
+  }
+  80% {
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes ball-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pipe-flow {
+  0% {
+    transform: translateY(-150%) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0) rotate(720deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(43 96% 56% / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(43 96% 56% / 0.7);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-ball-drop {
+  animation: ball-drop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-ball-bounce {
+  animation: ball-bounce 2s ease-in-out infinite;
+}
+
+.animate-pipe-flow {
+  animation: pipe-flow 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
