@@ -13,7 +13,7 @@ export const ShareButtons = ({ name, numbers }: ShareButtonsProps) => {
   const shareText = bonusNumber 
     ? `🍀 ${name}님의 오늘 로또 번호\n일반: ${mainNumbers}\n보너스: ${bonusNumber}\n\n이름이랑 생일로 로또 번호 뽑아봤는데 왠지 느낌 좋음 ✨`
     : `🍀 ${name}님의 오늘 로또 번호: ${mainNumbers}\n\n이름이랑 생일로 로또 번호 뽑아봤는데 왠지 느낌 좋음 ✨`;
-  const shareUrl = window.location.origin;
+  const shareUrl = "https://my-lucky-lotto.vercel.app/";
 
   const handleShare = async () => {
     try {
