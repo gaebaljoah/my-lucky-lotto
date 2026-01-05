@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- 배경 원 (로또 공) -->
+  <defs>
+    <radialGradient id="ballGradient" cx="35%" cy="35%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#F5A623;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E89E1C;stop-opacity:1" />
+    </radialGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- 메인 공 -->
+  <circle cx="50" cy="50" r="45" fill="url(#ballGradient)" filter="url(#shadow)"/>
+  
+  <!-- 하이라이트 -->
+  <ellipse cx="35" cy="30" rx="15" ry="12" fill="white" opacity="0.4"/>
+  
+  <!-- 네잎클로버 -->
+  <g transform="translate(50, 50)">
+    <!-- 줄기 -->
+    <rect x="-1.5" y="5" width="3" height="20" fill="#2D5016" rx="1.5"/>
+    
+    <!-- 왼쪽 위 잎 -->
+    <ellipse cx="-8" cy="-5" rx="7" ry="9" fill="#4CAF50" transform="rotate(-20 -8 -5)"/>
+    <ellipse cx="-8" cy="-5" rx="5" ry="6.5" fill="#66BB6A" transform="rotate(-20 -8 -5)"/>
+    
+    <!-- 오른쪽 위 잎 -->
+    <ellipse cx="8" cy="-5" rx="7" ry="9" fill="#4CAF50" transform="rotate(20 8 -5)"/>
+    <ellipse cx="8" cy="-5" rx="5" ry="6.5" fill="#66BB6A" transform="rotate(20 8 -5)"/>
+    
+    <!-- 왼쪽 아래 잎 -->
+    <ellipse cx="-8" cy="5" rx="7" ry="9" fill="#4CAF50" transform="rotate(20 -8 5)"/>
+    <ellipse cx="-8" cy="5" rx="5" ry="6.5" fill="#66BB6A" transform="rotate(20 -8 5)"/>
+    
+    <!-- 오른쪽 아래 잎 -->
+    <ellipse cx="8" cy="5" rx="7" ry="9" fill="#4CAF50" transform="rotate(-20 8 5)"/>
+    <ellipse cx="8" cy="5" rx="5" ry="6.5" fill="#66BB6A" transform="rotate(-20 8 5)"/>
+  </g>
+  
+  <!-- 그림자 효과 -->
+  <ellipse cx="50" cy="92" rx="35" ry="5" fill="black" opacity="0.15"/>
+</svg>
+

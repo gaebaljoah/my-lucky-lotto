@@ -58,14 +58,14 @@ const Index = () => {
 
   // Input state (default)
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4 py-8 gradient-lucky">
+    <main className="min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-6 md:py-8 gradient-lucky">
       <div className="w-full max-w-md">
         <LandingHero />
         <InputForm onSubmit={handleSubmit} />
 
         {/* Footer */}
-        <footer className="mt-12 text-center">
-          <p className="text-xs text-muted-foreground">
+        <footer className="mt-8 md:mt-12 text-center px-2">
+          <p className="text-[10px] md:text-xs text-muted-foreground">
             © 2024 오늘의 로또 번호 | 재미로 즐기세요 🍀
           </p>
         </footer>

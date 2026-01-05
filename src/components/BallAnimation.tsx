@@ -19,6 +19,7 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
   const [revealedCount, setRevealedCount] = useState(0);
   const [isSpinning, setIsSpinning] = useState(true);
   const [balls, setBalls] = useState<BouncingBall[]>([]);
+  const [showingBall, setShowingBall] = useState<number | null>(null);
 
   // Initialize bouncing balls
   useEffect(() => {
@@ -98,33 +99,46 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
     return () => clearInterval(animationFrame);
   }, [isSpinning]);
 
-  // Ball reveal logic
+  // Ball reveal logic - 추첨기는 계속 돌면서 공만 순차적으로 나타남
   useEffect(() => {
     if (revealedCount < numbers.length) {
-      const spinTimer = setTimeout(() => {
-        setIsSpinning(false);
-      }, 1200);
-
-      const revealTimer = setTimeout(() => {
+      // 첫 번째 공은 1초 후, 이후 공들은 1.2초 간격으로 나타남
+      const initialDelay = revealedCount === 0 ? 1000 : 1200;
+      
+      // 공을 출구에 표시하고 동시에 리스트에 추가
+      const showTimer = setTimeout(() => {
+        setShowingBall(numbers[revealedCount]);
         setRevealedCount(prev => prev + 1);
-        setIsSpinning(true);
-      }, 2000);
+      }, initialDelay);
+      
+      // 0.8초 후 출구에서 공 제거
+      const hideTimer = setTimeout(() => {
+        setShowingBall(null);
+      }, initialDelay + 800);
 
       return () => {
-        clearTimeout(spinTimer);
-        clearTimeout(revealTimer);
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
       };
     } else {
-      setIsSpinning(false);
+      // 모든 공이 나온 후에만 추첨기 정지
+      const stopTimer = setTimeout(() => {
+        setIsSpinning(false);
+      }, 500);
+      
       const completeTimer = setTimeout(onComplete, 1000);
-      return () => clearTimeout(completeTimer);
+      
+      return () => {
+        clearTimeout(stopTimer);
+        clearTimeout(completeTimer);
+      };
     }
-  }, [revealedCount, numbers.length, onComplete]);
+  }, [revealedCount, numbers.length, onComplete, numbers]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 gradient-lucky overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-6 md:py-8 gradient-lucky overflow-hidden">
       {/* Lotto Machine */}
-      <div className="relative mb-8">
+      <div className="relative mb-6 md:mb-8 scale-90 sm:scale-100">
         {/* Machine Top Handle */}
         <div className="w-16 h-8 bg-gradient-to-b from-primary to-primary/80 rounded-t-full mx-auto shadow-lg" />
         
@@ -170,11 +184,12 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
         {/* Ball Exit Tube */}
         <div className="relative mx-auto -mt-2">
           <div className="w-20 h-20 mx-auto bg-gradient-to-b from-muted-foreground to-muted rounded-b-full border-4 border-t-0 border-muted-foreground/30 flex items-center justify-center shadow-lg">
-            {/* Exit hole */}
+            {/* Exit hole - 공이 나타나는 곳 */}
             <div className="w-14 h-14 rounded-full bg-gradient-to-b from-foreground/20 to-foreground/40 flex items-center justify-center overflow-hidden">
-              {!isSpinning && revealedCount < numbers.length && (
-                <div className="animate-ball-drop">
-                  <LottoBall number={numbers[revealedCount]} size="md" />
+              {/* 추첨기가 계속 돌아가는 동안 공이 순간적으로 나타남 */}
+              {showingBall !== null && (
+                <div className="animate-ball-pop" key={showingBall}>
+                  <LottoBall number={showingBall} size="md" />
                 </div>
               )}
             </div>
@@ -186,32 +201,52 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
       </div>
 
       {/* Status Text */}
-      <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-3 bg-card px-6 py-3 rounded-full shadow-lg border border-border mb-4">
-          <div className={`w-4 h-4 rounded-full ${isSpinning ? 'bg-accent animate-ping' : 'bg-primary'}`} />
-          <p className="text-xl font-bold text-foreground">
-            {isSpinning ? "추첨 중..." : revealedCount < numbers.length ? `${revealedCount + 1}번째 공!` : "추첨 완료!"}
+      <div className="text-center mb-4 md:mb-6">
+        <div className="inline-flex items-center gap-2 md:gap-3 bg-card px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg border border-border mb-3 md:mb-4">
+          <div className={`w-3 h-3 md:w-4 md:h-4 rounded-full ${!isSpinning && revealedCount >= numbers.length ? 'bg-primary' : 'bg-accent animate-ping'}`} />
+          <p className="text-base md:text-xl font-bold text-foreground">
+            {!isSpinning && revealedCount >= numbers.length ? "추첨 완료!" : "추첨 중..."}
           </p>
         </div>
-        <p className="text-muted-foreground">
-          {revealedCount} / {numbers.length}
+        <p className="text-sm md:text-base text-muted-foreground">
+          {revealedCount >= 6 ? "5 + 보너스" : `${revealedCount} / 6`}
         </p>
       </div>
 
       {/* Revealed Balls Display */}
-      <div className="w-full max-w-sm">
-        <div className="bg-card/90 backdrop-blur rounded-2xl p-5 shadow-xl border border-border">
-          <p className="text-center text-sm text-muted-foreground mb-4 font-medium">🎱 뽑힌 번호</p>
-          <div className="flex flex-wrap justify-center gap-3 min-h-[60px]">
-            {numbers.slice(0, revealedCount).map((num, index) => (
+      <div className="w-full max-w-sm md:max-w-lg px-2">
+        <div className="bg-card/90 backdrop-blur rounded-2xl p-4 md:p-5 shadow-xl border border-border">
+          <p className="text-center text-xs md:text-sm text-muted-foreground mb-3 md:mb-4 font-medium">🎱 뽑힌 번호</p>
+          
+          {/* All Numbers (1-6 including bonus) */}
+          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3 min-h-[50px]">
+            {/* Main Numbers (1-5) */}
+            {numbers.slice(0, Math.min(5, revealedCount)).map((num, index) => (
               <div 
                 key={index}
                 className="animate-scale-in"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <LottoBall number={num} size="md" />
+                <LottoBall number={num} size="sm" />
               </div>
             ))}
+            
+            {/* Plus Sign before Bonus */}
+            {revealedCount > 5 && (
+              <div className="text-xl md:text-2xl font-bold text-primary mx-1">+</div>
+            )}
+            
+            {/* Bonus Number (6th) */}
+            {revealedCount > 5 && (
+              <div className="relative">
+                <div className="animate-scale-in">
+                  <LottoBall number={numbers[5]} size="sm" />
+                </div>
+                {/* 별 효과 */}
+                <div className="absolute -top-2 -right-2 text-primary text-base md:text-lg animate-pulse">⭐</div>
+              </div>
+            )}
+            
             {revealedCount === 0 && (
               <p className="text-muted-foreground text-sm flex items-center">추첨을 기다리는 중...</p>
             )}
