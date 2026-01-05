@@ -11,7 +11,56 @@ interface InputFormProps {
 export const InputForm = ({ onSubmit }: InputFormProps) => {
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
+  const [birthInput, setBirthInput] = useState(""); // 사용자가 입력하는 8자리 숫자
   const [gender, setGender] = useState<"male" | "female" | null>(null);
+
+  // 생년월일 입력 처리 (YYYYMMDD 형식)
+  const handleBirthDateChange = (value: string) => {
+    // 숫자만 허용
+    const numbers = value.replace(/[^0-9]/g, "");
+    
+    if (numbers.length <= 8) {
+      setBirthInput(numbers);
+      
+      // 8자리가 입력되면 YYYY-MM-DD 형식으로 변환
+      if (numbers.length === 8) {
+        const year = numbers.slice(0, 4);
+        const month = numbers.slice(4, 6);
+        const day = numbers.slice(6, 8);
+        
+        // 유효성 검사
+        const yearNum = parseInt(year);
+        const monthNum = parseInt(month);
+        const dayNum = parseInt(day);
+        
+        if (
+          yearNum >= 1900 && 
+          yearNum <= new Date().getFullYear() &&
+          monthNum >= 1 && 
+          monthNum <= 12 &&
+          dayNum >= 1 && 
+          dayNum <= 31
+        ) {
+          setBirthDate(`${year}-${month}-${day}`);
+        } else {
+          setBirthDate("");
+        }
+      } else {
+        setBirthDate("");
+      }
+    }
+  };
+
+  // 입력 필드 표시용 포맷팅 (YYYY.MM.DD)
+  const getFormattedBirthInput = () => {
+    if (birthInput.length <= 4) {
+      return birthInput;
+    } else if (birthInput.length <= 6) {
+      return `${birthInput.slice(0, 4)}.${birthInput.slice(4)}`;
+    } else {
+      return `${birthInput.slice(0, 4)}.${birthInput.slice(4, 6)}.${birthInput.slice(6)}`;
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,12 +96,17 @@ export const InputForm = ({ onSubmit }: InputFormProps) => {
         </Label>
         <Input
           id="birthDate"
-          type="date"
-          value={birthDate}
-          onChange={(e) => setBirthDate(e.target.value)}
+          type="tel"
+          inputMode="numeric"
+          placeholder="19900115"
+          value={getFormattedBirthInput()}
+          onChange={(e) => handleBirthDateChange(e.target.value)}
           className="h-12 md:h-14 text-base md:text-lg bg-card border-2 border-border focus:border-primary rounded-xl px-4"
-          max={new Date().toISOString().split("T")[0]}
+          maxLength={10}
         />
+        <p className="text-xs text-muted-foreground mt-1">
+          8자리 숫자로 입력해주세요 (예: 19900115)
+        </p>
       </div>
 
       {/* Gender Selection */}

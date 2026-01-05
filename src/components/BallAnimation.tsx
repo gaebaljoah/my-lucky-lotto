@@ -21,20 +21,20 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
   const [balls, setBalls] = useState<BouncingBall[]>([]);
   const [showingBall, setShowingBall] = useState<number | null>(null);
 
-  // Initialize bouncing balls
+  // Initialize bouncing balls - 적당히 역동적인 초기 속도
   useEffect(() => {
     const initialBalls: BouncingBall[] = Array.from({ length: 15 }, (_, i) => ({
       id: i,
       number: Math.floor(Math.random() * 45) + 1,
       x: Math.random() * 160 + 20,
       y: Math.random() * 160 + 20,
-      vx: (Math.random() - 0.5) * 8,
-      vy: (Math.random() - 0.5) * 8,
+      vx: (Math.random() - 0.5) * 14, // 원래 8, 최대 24의 중간인 14
+      vy: (Math.random() - 0.5) * 14,
     }));
     setBalls(initialBalls);
   }, []);
 
-  // Animate bouncing balls
+  // Animate bouncing balls - 적당히 역동적인 물리 엔진
   useEffect(() => {
     if (!isSpinning) return;
 
@@ -51,8 +51,8 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
           let newVx = ball.vx;
           let newVy = ball.vy;
 
-          // Apply gravity
-          newVy += 0.3;
+          // Apply moderate gravity
+          newVy += 0.45; // 원래 0.3, 최대 0.6의 중간인 0.45
 
           // Check collision with circular boundary
           const dx = newX - centerX;
@@ -68,21 +68,21 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
             newX = centerX + nx * (drumRadius - ballRadius);
             newY = centerY + ny * (drumRadius - ballRadius);
             
-            // Reflect velocity
+            // Reflect velocity with moderate bounce
             const dotProduct = newVx * nx + newVy * ny;
-            newVx = (newVx - 2 * dotProduct * nx) * 0.8;
-            newVy = (newVy - 2 * dotProduct * ny) * 0.8;
+            newVx = (newVx - 2 * dotProduct * nx) * 0.875; // 원래 0.8, 최대 0.95의 중간인 0.875
+            newVy = (newVy - 2 * dotProduct * ny) * 0.875;
 
-            // Add some randomness for chaotic motion
-            newVx += (Math.random() - 0.5) * 2;
-            newVy += (Math.random() - 0.5) * 2;
+            // Add moderate randomness
+            newVx += (Math.random() - 0.5) * 3.5; // 원래 2, 최대 6의 중간인 3.5
+            newVy += (Math.random() - 0.5) * 3.5;
           }
 
-          // Speed limit
+          // Moderate speed limit
           const speed = Math.sqrt(newVx * newVx + newVy * newVy);
-          if (speed > 12) {
-            newVx = (newVx / speed) * 12;
-            newVy = (newVy / speed) * 12;
+          if (speed > 17) { // 원래 12, 최대 22의 중간인 17
+            newVx = (newVx / speed) * 17;
+            newVy = (newVy / speed) * 17;
           }
 
           return {
@@ -94,7 +94,7 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
           };
         })
       );
-    }, 30);
+    }, 20); // 원래 30ms, 최대 16ms의 중간인 20ms
 
     return () => clearInterval(animationFrame);
   }, [isSpinning]);
@@ -155,20 +155,28 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
             
             {/* Bouncing balls container */}
             <div className="relative w-full h-full">
-              {balls.map((ball) => (
-                <div
-                  key={ball.id}
-                  className="absolute transition-none"
-                  style={{
-                    left: `${ball.x - 18}px`,
-                    top: `${ball.y - 18}px`,
-                    transform: isSpinning ? 'scale(1)' : 'scale(0.9)',
-                    opacity: isSpinning ? 1 : 0.7,
-                  }}
-                >
-                  <LottoBall number={ball.number} size="sm" />
-                </div>
-              ))}
+              {balls.map((ball) => {
+                // 속도에 따른 적당한 회전 각도 계산
+                const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+                const rotation = (ball.x + ball.y + speed) * 5; // 10 → 5로 회전 속도 반으로 감소
+                
+                return (
+                  <div
+                    key={ball.id}
+                    className="absolute transition-none"
+                    style={{
+                      left: `${ball.x - 18}px`,
+                      top: `${ball.y - 18}px`,
+                      transform: isSpinning 
+                        ? `scale(1) rotate(${rotation}deg)` 
+                        : 'scale(0.9)',
+                      opacity: isSpinning ? 1 : 0.7,
+                    }}
+                  >
+                    <LottoBall number={ball.number} size="sm" />
+                  </div>
+                );
+              })}
             </div>
           </div>
 
