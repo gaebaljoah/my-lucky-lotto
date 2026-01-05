@@ -1,6 +1,5 @@
 import { LottoBall } from "./LottoBall";
 import { ShareButtons } from "./ShareButtons";
-import { AdPlaceholder } from "./AdPlaceholder";
 import { Button } from "./ui/button";
 import { RefreshCw, Calendar } from "lucide-react";
 
@@ -18,10 +17,7 @@ export const ResultPage = ({ name, numbers, onReset }: ResultPageProps) => {
   });
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-3 sm:px-4 py-6 md:py-8 gradient-lucky">
-      {/* Ad Placeholder - Top */}
-      <AdPlaceholder position="top" />
-
+    <div className="min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-8 gradient-lucky">
       {/* Result Card */}
       <div className="w-full max-w-md bg-card rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 card-shadow animate-scale-in">
         {/* Header */}
@@ -121,9 +117,6 @@ export const ResultPage = ({ name, numbers, onReset }: ResultPageProps) => {
           </div>
         </div>
       </div>
-
-      {/* Ad Placeholder - Bottom */}
-      <AdPlaceholder position="bottom" />
     </div>
   );
 };

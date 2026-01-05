@@ -72,7 +72,7 @@ export const InputForm = ({ onSubmit }: InputFormProps) => {
   const isValid = name.trim() && birthDate && gender;
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5 md:space-y-6 animate-fade-in px-2">
+    <form onSubmit={handleSubmit} className="w-full space-y-5 md:space-y-6 animate-fade-in px-2">
       {/* Name Input */}
       <div className="space-y-2">
         <Label htmlFor="name" className="text-sm md:text-base font-medium">

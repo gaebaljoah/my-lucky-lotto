@@ -136,7 +136,7 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
   }, [revealedCount, numbers.length, onComplete, numbers]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-6 md:py-8 gradient-lucky overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 gradient-lucky overflow-hidden">
       {/* Lotto Machine */}
       <div className="relative mb-6 md:mb-8 scale-90 sm:scale-100">
         {/* Machine Top Handle */}
