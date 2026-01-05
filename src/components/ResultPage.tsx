@@ -1,5 +1,6 @@
 import { LottoBall } from "./LottoBall";
 import { ShareButtons } from "./ShareButtons";
+import { AdFitBanner } from "./AdFitBanner";
 import { Button } from "./ui/button";
 import { RefreshCw, Calendar } from "lucide-react";
 
@@ -18,6 +19,13 @@ export const ResultPage = ({ name, numbers, onReset }: ResultPageProps) => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-8 gradient-lucky">
+      {/* 상단 광고 (320x100) */}
+      <AdFitBanner 
+        unit="DAN-5xgTcCEfRRZJIrBe" 
+        width="320" 
+        height="100" 
+      />
+
       {/* Result Card */}
       <div className="w-full max-w-md bg-card rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 card-shadow animate-scale-in">
         {/* Header */}
@@ -117,6 +125,13 @@ export const ResultPage = ({ name, numbers, onReset }: ResultPageProps) => {
           </div>
         </div>
       </div>
+
+      {/* 하단 광고 (320x50) */}
+      <AdFitBanner 
+        unit="DAN-NsHwPpuUn0NEVjzI" 
+        width="320" 
+        height="50" 
+      />
     </div>
   );
 };
