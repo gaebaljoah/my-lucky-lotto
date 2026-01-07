@@ -30,7 +30,7 @@ export function generateLottoNumbers(
   
   const random = seededRandom(seed);
   
-  // Generate 6 unique numbers between 1 and 45 (5 main + 1 bonus)
+  // Generate 6 unique numbers between 1 and 45
   const numbers: number[] = [];
   const available = Array.from({ length: 45 }, (_, i) => i + 1);
   
@@ -40,10 +40,6 @@ export function generateLottoNumbers(
     available.splice(index, 1);
   }
   
-  // Sort first 5 numbers in ascending order (main numbers)
-  // Keep the last one as bonus (unsorted position)
-  const mainNumbers = numbers.slice(0, 5).sort((a, b) => a - b);
-  const bonusNumber = numbers[5];
-  
-  return [...mainNumbers, bonusNumber];
+  // Sort all 6 numbers in ascending order
+  return numbers.sort((a, b) => a - b);
 }

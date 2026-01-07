@@ -217,7 +217,7 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
           </p>
         </div>
         <p className="text-sm md:text-base text-muted-foreground">
-          {revealedCount >= 6 ? "5 + 보너스" : `${revealedCount} / 6`}
+          {revealedCount} / 6
         </p>
       </div>
 
@@ -226,10 +226,9 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
         <div className="bg-card/90 backdrop-blur rounded-2xl p-4 md:p-5 shadow-xl border border-border">
           <p className="text-center text-xs md:text-sm text-muted-foreground mb-3 md:mb-4 font-medium">🎱 뽑힌 번호</p>
           
-          {/* All Numbers (1-6 including bonus) */}
+          {/* All 6 Numbers */}
           <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3 min-h-[50px]">
-            {/* Main Numbers (1-5) */}
-            {numbers.slice(0, Math.min(5, revealedCount)).map((num, index) => (
+            {numbers.slice(0, revealedCount).map((num, index) => (
               <div 
                 key={index}
                 className="animate-scale-in"
@@ -238,22 +237,6 @@ export const BallAnimation = ({ numbers, onComplete }: BallAnimationProps) => {
                 <LottoBall number={num} size="sm" />
               </div>
             ))}
-            
-            {/* Plus Sign before Bonus */}
-            {revealedCount > 5 && (
-              <div className="text-xl md:text-2xl font-bold text-primary mx-1">+</div>
-            )}
-            
-            {/* Bonus Number (6th) */}
-            {revealedCount > 5 && (
-              <div className="relative">
-                <div className="animate-scale-in">
-                  <LottoBall number={numbers[5]} size="sm" />
-                </div>
-                {/* 별 효과 */}
-                <div className="absolute -top-2 -right-2 text-primary text-base md:text-lg animate-pulse">⭐</div>
-              </div>
-            )}
             
             {revealedCount === 0 && (
               <p className="text-muted-foreground text-sm flex items-center">추첨을 기다리는 중...</p>

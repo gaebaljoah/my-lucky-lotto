@@ -44,10 +44,9 @@ export const ResultPage = ({ name, numbers, onReset }: ResultPageProps) => {
 
         {/* Lotto Balls */}
         <div className="mb-5 md:mb-6 py-3 md:py-4">
-          {/* All Numbers (1-6 including bonus) */}
+          {/* All 6 Numbers */}
           <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3">
-            {/* Main Numbers (1-5) */}
-            {numbers.slice(0, 5).map((num, index) => (
+            {numbers.map((num, index) => (
               <LottoBall 
                 key={index} 
                 number={num} 
@@ -56,29 +55,10 @@ export const ResultPage = ({ name, numbers, onReset }: ResultPageProps) => {
                 delay={index * 150}
               />
             ))}
-            
-            {/* Plus Sign before Bonus */}
-            {numbers.length > 5 && (
-              <div className="text-xl md:text-2xl font-bold text-primary mx-1">+</div>
-            )}
-            
-            {/* Bonus Number (6th) */}
-            {numbers.length > 5 && (
-              <div className="relative">
-                <LottoBall 
-                  number={numbers[5]} 
-                  size="sm" 
-                  animate 
-                  delay={750}
-                />
-                {/* 별 효과 */}
-                <div className="absolute -top-2 -right-2 text-primary text-base md:text-lg animate-pulse">⭐</div>
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Bonus Message */}
+        {/* Daily Message */}
         <div className="bg-secondary/50 rounded-lg md:rounded-xl p-3 md:p-4 mb-4 md:mb-6 text-center">
           <p className="text-xs md:text-sm text-muted-foreground mb-1">
             📅 오늘 날짜 기준으로 생성된 번호입니다
